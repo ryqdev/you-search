@@ -1,8 +1,10 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify, Response
+from flask_cors import CORS
 import json
 from youtube_transcript_api import YouTubeTranscriptApi
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
@@ -12,23 +14,20 @@ def home():
 def about():
     return 'About'
 
-@app.route('/tldr', methods = ['POST', 'GET'])
+@app.route('/tldr', methods=['POST'])
 def tldr():
-    if request.method == 'GET':
-        return "tldr"
-    else:
-        json_str = request.body.decode('utf-8')
-        json_data = json.loads(json_str)
-        video_id = json_data['video_id']
-        subtitles = json.dumps(get_subtitles(video_id))
-        return subtitles 
+    if request.method == 'POST':
+        data = json.loads(request.data)
+        video_id = data.get('video_id') # Retrieve the video_id from the JSON payload
+        subtitles = get_subtitles(video_id)
+        # Convert subtitles to a JSON response
+
+        response = jsonify(subtitles)
+        # response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 def get_subtitles(video_id):
-    # video_id = extract_video_id(url)
-
     transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-
-    # iterate over all available transcripts
     for transcript in transcript_list:
         result = transcript.fetch()
         if result is not None:
