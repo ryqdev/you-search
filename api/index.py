@@ -11,5 +11,5 @@ def about():
     return 'About'
 
 @app.route('/tldr')
-def about():
+def tldr():
     return 'tldr'
