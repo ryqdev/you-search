@@ -2,11 +2,14 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from flask import jsonify
 import json
 
+from loguru import logger
+
 
 def tldr(request):
     if request.method == 'POST':
         data = json.loads(request.data)
         video_id = data.get('video_id')
+        logger.info("video_id: " + video_id)
         subtitles = get_subtitles(video_id)
         response = jsonify(subtitles)
         return response
