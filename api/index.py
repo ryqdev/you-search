@@ -21,3 +21,15 @@ def ping():
 @app.route('/tldr', methods=['POST'])
 def tldr():
     return yt.tldr(request)
+
+# Test of ping
+
+"""
+curl --request POST \
+  --url https://you-search-zeta.vercel.app/ping \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/9.3.2' \
+  --data '{
+	"id": 123
+}'
+"""
